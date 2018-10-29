@@ -87,11 +87,11 @@ function colorShade(usageRange, colors) {
     index = 1;
   } else if (usageRange > 5 && usageRange <= 10) {
     index = 2;
-  } else if (usageRange > 10 && usageRange <= 15) {
+  } else if (usageRange > 10 && usageRange <= 15  ) {
     index = 3;
-  } else if (usageRange > 15 && usageRange <= 30) {
+  } else if (usageRange > 15 && usageRange <= 20) {
     index = 4;
-  } else if (usageRange > 30) {
+  } else if (usageRange > 20) {
     index = 5;
   }
   return colors[index];
@@ -516,13 +516,15 @@ function createMap(selector, options, mapData) {
   var element = document.querySelector(selector).getBoundingClientRect();
   var width = element.width;
   var height = element.height;
-
+  
   function render(world) {
     //   Snapdata = country mapped to ids in objects
     // Get the countries and ids
     var svg = d3.select(selector);
     var g = svg.append('g');
     var offset = width * 0.1;
+    var totalUsers = options.countryStats.reduce((a, b) =>  a + b.users, 0);
+    
     var projection = d3.geoNaturalEarth1()
       .scale(width * 0.2)
       .translate([(width / 2), ((height + offset) / 2) ])
@@ -541,7 +543,7 @@ function createMap(selector, options, mapData) {
           });
 
           if (countryStat) {
-            var countryRatio = (countryStat.users * 100 / countryStat.total);
+            var countryRatio = (countryStat.users * 100 / totalUsers);
             var shade = colorShade(countryRatio, options.legend.colors);
             return shade;
           }
